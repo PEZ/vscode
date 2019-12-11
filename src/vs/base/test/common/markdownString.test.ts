@@ -16,4 +16,48 @@ suite('markdownString', () => {
 
 		assert.equal(mds.value, '\\# foo\n\n\\*bar\\*');
 	});
+
+
+	test('themeIconsOnText', () => {
+		const mds = new MarkdownString(undefined, { supportThemeIcons: true });
+		mds.appendText('$(zap)');
+
+		assert.equal(mds.value, '$(zap)');
+	});
+
+	test('themeIconsOnMarkdown', () => {
+		const mds = new MarkdownString(undefined, { supportThemeIcons: true });
+		mds.appendMarkdown('$(zap)');
+
+		assert.equal(mds.value, '$(zap)');
+	});
+
+	test('themeIconsOnMarkdownEscaped', () => {
+		const mds = new MarkdownString(undefined, { supportThemeIcons: true });
+		mds.appendMarkdown('$(zap)', { escapeThemeIcons: true });
+
+		assert.equal(mds.value, '\\\\$\\(zap\\)');
+	});
+
+	test('themeIconsOffText', () => {
+		const mds = new MarkdownString(undefined, { supportThemeIcons: false });
+		mds.appendText('$(zap)');
+
+		assert.equal(mds.value, '$\\(zap\\)');
+	});
+
+	test('themeIconsOffMarkdown', () => {
+		const mds = new MarkdownString(undefined, { supportThemeIcons: false });
+		mds.appendMarkdown('$(zap)');
+
+		assert.equal(mds.value, '$(zap)');
+	});
+
+	test('themeIconsOffMarkdownEscaped', () => {
+		const mds = new MarkdownString(undefined, { supportThemeIcons: false });
+		mds.appendMarkdown('$(zap)', { escapeThemeIcons: true });
+
+		assert.equal(mds.value, '$(zap)');
+	});
+
 });

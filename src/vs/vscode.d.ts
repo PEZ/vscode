@@ -2356,8 +2356,9 @@ declare module 'vscode' {
 		 * Creates a new markdown string with the given value.
 		 *
 		 * @param value Optional, initial value.
+		 * @param options Optional, options.
 		 */
-		constructor(value?: string);
+		constructor(value?: string, options?: { supportThemeIcons?: boolean });
 
 		/**
 		 * Appends and escapes the given string to this markdown string.

@@ -15,6 +15,7 @@ import { cloneAndChange } from 'vs/base/common/objects';
 import { escape } from 'vs/base/common/strings';
 import { URI } from 'vs/base/common/uri';
 import { Schemas } from 'vs/base/common/network';
+import { renderCodicons } from 'vs/base/common/codicons';
 
 export interface MarkdownRenderOptions extends FormattedTextRenderOptions {
 	codeBlockRenderer?: (modeId: string, value: string) => Promise<string>;
@@ -118,7 +119,7 @@ export function renderMarkdown(markdown: IMarkdownString, options: MarkdownRende
 		}
 	};
 	renderer.paragraph = (text): string => {
-		return `<p>${text}</p>`;
+		return `<p>${markdown.supportThemeIcons ? renderCodicons(text) : text}</p>`;
 	};
 
 	if (options.codeBlockRenderer) {

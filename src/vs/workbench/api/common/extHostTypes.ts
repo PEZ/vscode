@@ -14,6 +14,7 @@ import { generateUuid } from 'vs/base/common/uuid';
 import * as vscode from 'vscode';
 import { FileSystemProviderErrorCode, markAsFileSystemProviderError } from 'vs/platform/files/common/files';
 import { RemoteAuthorityResolverErrorCode } from 'vs/platform/remote/common/remoteAuthorityResolver';
+import { unescapeCodicons, escapeCodicons } from 'vs/base/common/codicons';
 
 function es5ClassCompat(target: Function): any {
 	///@ts-ignore
@@ -1231,21 +1232,26 @@ export class MarkdownString {
 
 	value: string;
 	isTrusted?: boolean;
+	readonly supportThemeIcons?: boolean;
 
-	constructor(value?: string) {
+	constructor(value?: string, { supportThemeIcons }: { supportThemeIcons?: boolean } = {}) {
 		this.value = value || '';
+		this.supportThemeIcons = supportThemeIcons;
 	}
 
 	appendText(value: string): MarkdownString {
 		// escape markdown syntax tokens: http://daringfireball.net/projects/markdown/syntax#backslash
-		this.value += value
+		value = value
 			.replace(/[\\`*_{}[\]()#+\-.!]/g, '\\$&')
 			.replace('\n', '\n\n');
+		this.value += this.supportThemeIcons ? unescapeCodicons(value) : value;
+
 		return this;
 	}
 
-	appendMarkdown(value: string): MarkdownString {
-		this.value += value;
+	appendMarkdown(value: string, { escapeThemeIcons }: { escapeThemeIcons?: boolean } = {}): MarkdownString {
+		this.value += this.supportThemeIcons && escapeThemeIcons ? escapeCodicons(value, true) : value;
+
 		return this;
 	}
 
