@@ -4,7 +4,7 @@
 	"colors": {
 		"input.background": "#51412c",
 		"dropdown.background": "#51412c",
-		"editor.background": "#221a0f",
+		"editor.background": "#13371137",
 		"editor.foreground": "#d3af86",
 		"focusBorder": "#a57a4c",
 		"list.highlightForeground": "#e3b583",

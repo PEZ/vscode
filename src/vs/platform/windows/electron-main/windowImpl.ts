@@ -244,7 +244,9 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 				height: this.windowState.height,
 				x: this.windowState.x,
 				y: this.windowState.y,
-				backgroundColor: this.themeMainService.getBackgroundColor(),
+				transparent: true,
+				backgroundColor: '#13371337',
+				// backgroundColor: this.themeMainService.getBackgroundColor(),
 				minWidth: WindowMinimumSize.WIDTH,
 				minHeight: WindowMinimumSize.HEIGHT,
 				show: !isFullscreenOrMaximized, // reduce flicker by showing later
