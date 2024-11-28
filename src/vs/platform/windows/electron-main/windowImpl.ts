@@ -184,6 +184,34 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 	private pendingLoadConfig: INativeWindowConfiguration | undefined;
 	private wasLoaded = false;
 
+	private isCursorInTargetArea(): boolean {
+    const cursorPos = screen.getCursorScreenPoint();
+    const windowBounds = this._win.getBounds();
+    const targetArea = {
+        x: windowBounds.x,
+        y: windowBounds.y,
+        width: 100,
+        height: 100
+    };
+
+    return (
+        cursorPos.x >= targetArea.x &&
+        cursorPos.x <= targetArea.x + targetArea.width &&
+        cursorPos.y >= targetArea.y &&
+        cursorPos.y <= targetArea.y + targetArea.height
+    );
+  }
+
+	private startCursorTracking(): void {
+		setInterval(() => {
+				if (this.isCursorInTargetArea()) {
+						this._win.setIgnoreMouseEvents(true, { forward: true });
+				} else {
+						this._win.setIgnoreMouseEvents(false);
+				}
+		}, 100); // Check every 100ms
+	}
+
 	constructor(
 		config: IWindowCreationOptions,
 		@ILogService private readonly logService: ILogService,
@@ -333,9 +361,12 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 			// Create the browser window
 			mark('code/willCreateCodeBrowserWindow');
 			this._win = new BrowserWindow(options);
+
 			mark('code/didCreateCodeBrowserWindow');
 
 			this._id = this._win.id;
+
+			this.startCursorTracking();
 
 			if (isMacintosh && useCustomTitleStyle) {
 				this._win.setSheetOffset(22); // offset dialogs by the height of the custom title bar if we have any

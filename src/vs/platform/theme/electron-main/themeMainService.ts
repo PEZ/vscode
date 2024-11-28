@@ -120,7 +120,8 @@ export class ThemeMainService extends Disposable implements IThemeMainService {
 	private updateBackgroundColor(windowId: number, splash: IPartsSplash): void {
 		for (const window of BrowserWindow.getAllWindows()) {
 			if (window.id === windowId) {
-				window.setBackgroundColor(splash.colorInfo.background);
+				// window.setBackgroundColor(splash.colorInfo.background);
+				console.debug(`[ThemeMainService]: Set background color for window ${windowId} to ${splash.colorInfo.background}`);
 				break;
 			}
 		}
