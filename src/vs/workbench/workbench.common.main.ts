@@ -362,4 +362,6 @@ import 'vs/workbench/contrib/deprecatedExtensionMigrator/browser/deprecatedExten
 // Bracket Pair Colorizer 2 Telemetry
 import 'vs/workbench/contrib/bracketPairColorizer2Telemetry/browser/bracketPairColorizer2Telemetry.contribution';
 
+// eslint-disable-next-line local/code-import-patterns
+import 'vs/workbench/contrib/extensions/seethrough/browser/seethrough.contribution';
 //#endregion
