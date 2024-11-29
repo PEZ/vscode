@@ -273,7 +273,7 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 				x: this.windowState.x,
 				y: this.windowState.y,
 				transparent: true,
-				backgroundColor: '#13371337',
+				// backgroundColor: '#13371337',
 				// backgroundColor: this.themeMainService.getBackgroundColor(),
 				minWidth: WindowMinimumSize.WIDTH,
 				minHeight: WindowMinimumSize.HEIGHT,
