@@ -54,8 +54,15 @@ export class TransparentViewPane extends ViewPane {
 
       const style = document.createElement('style');
       style.textContent = `
-          .pane-body, .composite.title, .pane-header { background-color: #1E1E1E !important; }
-          .transparent-view-pane { background-color: rgba(0, 0, 0, 0.0) !important; }
+          .pane-body, .composite.title, .pane-header
+          {
+            background-color: #1E1E1E !important;
+          }
+          .transparent-view-pane
+          {
+            background-color: rgba(0, 0, 0, 0.0) !important;
+            border: #1E1E1E solid 1px !important;
+          }
       `;
       document.head.appendChild(style);
 
@@ -74,10 +81,6 @@ export class TransparentViewPane extends ViewPane {
           width: rect.width * scale,
           height: rect.height * scale
       };
-      console.log('Sending view dimensions', JSON.stringify(dimensions));
-      console.log('bounding client rect', JSON.stringify(rect));
-      console.log('devicePixelRatio:', scale);
-
       (window as any).electronAPI.sendTransparentViewDimensions(dimensions);
     }
 }
