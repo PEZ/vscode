@@ -26,7 +26,8 @@
 		"list.activeSelectionIconForeground": "#FFF",
 		"terminal.inactiveSelectionBackground": "#3A3D41",
 		"widget.border": "#303031",
-		"panel.background": "#13371337",
+		"panel.background": "#13371300",
+		"sideBar.background": "#13371300",
 	},
 	"tokenColors": [
 		{

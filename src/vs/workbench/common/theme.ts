@@ -20,7 +20,7 @@ export function WORKBENCH_BACKGROUND(theme: IColorTheme): Color {
 		case ColorScheme.HIGH_CONTRAST_DARK:
 			return Color.fromHex('#000000');
 		default:
-			return Color.fromHex('#13371337');
+			return Color.fromHex('#13371300');
 	}
 }
 
@@ -675,7 +675,7 @@ export const EXTENSION_BADGE_REMOTE_FOREGROUND = registerColor('extensionBadge.r
 // < --- Side Bar --- >
 
 export const SIDE_BAR_BACKGROUND = registerColor('sideBar.background', {
-	dark: '#13371337',
+	dark: '#1E1E1E',
 	light: '#F3F3F3',
 	hcDark: '#000000',
 	hcLight: '#FFFFFF'
