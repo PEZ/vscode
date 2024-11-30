@@ -57,16 +57,19 @@ export class TransparentViewPane extends ViewPane {
       window.addEventListener('resize', () => this.sendViewDimensions(container));
   }
 
-    private sendViewDimensions(container: HTMLElement): void {
-			const rect = container.getBoundingClientRect();
-			const dimensions = {
-					x: rect.x,
-					y: rect.y,
-					width: rect.width,
-					height: rect.height
-			};
-      console.log('Sending view dimensions', JSON.stringify(dimensions));
-      console.log('bounding client rect', JSON.stringify(rect));
-      (window as any).electronAPI.sendTransparentViewDimensions(dimensions);
-		}
+  private sendViewDimensions(container: HTMLElement): void {
+    const rect = container.getBoundingClientRect();
+    const scale = window.devicePixelRatio / 2.0;
+    const dimensions = {
+        x: rect.x * scale,
+        y: rect.y * scale,
+        width: rect.width * scale,
+        height: rect.height * scale
+    };
+    console.log('Sending view dimensions', JSON.stringify(dimensions));
+    console.log('bounding client rect', JSON.stringify(rect));
+    console.log('devicePixelRatio:', scale);
+
+    (window as any).electronAPI.sendTransparentViewDimensions(dimensions);
+  }
 }
