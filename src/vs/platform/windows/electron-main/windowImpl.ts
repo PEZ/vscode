@@ -52,6 +52,8 @@ import { resolveMachineId } from 'vs/platform/telemetry/electron-main/telemetryU
 import { ILoggerMainService } from 'vs/platform/log/electron-main/loggerService';
 import { firstOrDefault } from 'vs/base/common/arrays';
 
+import { validatedIpcMain } from 'vs/base/parts/ipc/electron-main/ipcMain';
+
 export interface IWindowCreationOptions {
 	readonly state: IWindowState;
 	readonly extensionDevelopmentPath?: string[];
@@ -184,32 +186,38 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 	private pendingLoadConfig: INativeWindowConfiguration | undefined;
 	private wasLoaded = false;
 
-	private isCursorInTargetArea(): boolean {
-    const cursorPos = screen.getCursorScreenPoint();
-    const windowBounds = this._win.getBounds();
-    const targetArea = {
-        x: windowBounds.x,
-        y: windowBounds.y,
-        width: 100,
-        height: 100
-    };
+	private transparentViewDimensions: { x: number; y: number; width: number; height: number } | null = null;
 
-    return (
-        cursorPos.x >= targetArea.x &&
-        cursorPos.x <= targetArea.x + targetArea.width &&
-        cursorPos.y >= targetArea.y &&
-        cursorPos.y <= targetArea.y + targetArea.height
-    );
-  }
+	private isCursorInTransparentView(): boolean {
+		if (!this.transparentViewDimensions) {
+				return false;
+		}
+
+		const cursorPos = screen.getCursorScreenPoint();
+		const windowBounds = this._win.getBounds();
+		const viewBounds = {
+				x: windowBounds.x + this.transparentViewDimensions.x,
+				y: windowBounds.y + this.transparentViewDimensions.y,
+				width: this.transparentViewDimensions.width,
+				height: this.transparentViewDimensions.height
+		};
+
+		return (
+				cursorPos.x >= viewBounds.x &&
+				cursorPos.x <= viewBounds.x + viewBounds.width &&
+				cursorPos.y >= viewBounds.y &&
+				cursorPos.y <= viewBounds.y + viewBounds.height
+		);
+	}
 
 	private startCursorTracking(): void {
-		setInterval(() => {
-				if (this.isCursorInTargetArea()) {
-						this._win.setIgnoreMouseEvents(true, { forward: true });
-				} else {
-						this._win.setIgnoreMouseEvents(false);
-				}
-		}, 100); // Check every 100ms
+			setInterval(() => {
+					if (this.isCursorInTransparentView()) {
+							this._win.setIgnoreMouseEvents(true, { forward: true });
+					} else {
+							this._win.setIgnoreMouseEvents(false);
+					}
+			}, 100); // Check every 100ms
 	}
 
 	constructor(
@@ -365,6 +373,10 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 			mark('code/didCreateCodeBrowserWindow');
 
 			this._id = this._win.id;
+
+			validatedIpcMain.on('vscode:transparent-view-dimensions', (_event, dimensions) => {
+				this.transparentViewDimensions = dimensions;
+			});
 
 			this.startCursorTracking();
 

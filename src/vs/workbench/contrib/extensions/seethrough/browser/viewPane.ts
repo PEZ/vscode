@@ -15,6 +15,8 @@ import { IEditorService } from 'vs/workbench/services/editor/common/editorServic
 import { IContextMenuService } from 'vs/platform/contextview/browser/contextView';
 import { IOpenerService } from 'vs/platform/opener/common/opener';
 
+export let transparentPane: TransparentViewPane;
+
 export class TransparentViewPane extends ViewPane {
     constructor(
         options: IViewPaneOptions,
@@ -42,10 +44,29 @@ export class TransparentViewPane extends ViewPane {
                 themeService,
                 telemetryService,
             );
+						transparentPane = this;
     }
 
     override renderBody(container: HTMLElement): void {
-        super.renderBody(container);
-        container.style.backgroundColor = 'rgba(0, 0, 0, 0.0)'; // Set transparency
-    }
+      super.renderBody(container);
+      container.style.backgroundColor = 'rgba(0, 0, 0, 0.0)';
+      // Add visual debug border
+      container.style.border = '2px solid red';
+
+      this.sendViewDimensions(container);
+      window.addEventListener('resize', () => this.sendViewDimensions(container));
+  }
+
+    private sendViewDimensions(container: HTMLElement): void {
+			const rect = container.getBoundingClientRect();
+			const dimensions = {
+					x: rect.x,
+					y: rect.y,
+					width: rect.width,
+					height: rect.height
+			};
+      console.log('Sending view dimensions', JSON.stringify(dimensions));
+      console.log('bounding client rect', JSON.stringify(rect));
+      (window as any).electronAPI.sendTransparentViewDimensions(dimensions);
+		}
 }

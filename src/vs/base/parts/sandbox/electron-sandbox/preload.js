@@ -328,6 +328,11 @@
 	if (process.contextIsolated) {
 		try {
 			contextBridge.exposeInMainWorld('vscode', globals);
+			contextBridge.exposeInMainWorld('electronAPI', {
+				sendTransparentViewDimensions: (dimensions) => {
+						ipcRenderer.send('vscode:transparent-view-dimensions', dimensions);
+				}
+		});
 		} catch (error) {
 			console.error(error);
 		}
