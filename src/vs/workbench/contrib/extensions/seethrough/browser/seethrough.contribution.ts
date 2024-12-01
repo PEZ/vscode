@@ -5,10 +5,12 @@ import { Registry } from 'vs/platform/registry/common/platform';
 import { Extensions as ViewContainerExtensions, IViewContainersRegistry, ViewContainerLocation, IViewsRegistry } from 'vs/workbench/common/views';
 import { IWorkbenchContributionsRegistry, Extensions as WorkbenchExtensions, IWorkbenchContribution } from 'vs/workbench/common/contributions';
 import { LifecyclePhase } from 'vs/workbench/services/lifecycle/common/lifecycle';
-import { TransparentViewPane } from './viewPane';
-import { VIEWLET_ID, TRANSPARENT_VIEW_ID } from './constants';
+import { SeethroughViewPane } from './seethroughView';
 
-class TransparentViewContribution implements IWorkbenchContribution {
+export const VIEWLET_ID = 'workbench.view.transparent';
+export const TRANSPARENT_VIEW_ID = 'workbench.view.seethroughView';
+
+class SeethroughViewContribution implements IWorkbenchContribution {
     constructor() {
         console.log('BOOM! Registering Transparent View');
         // Register Transparent View
@@ -16,7 +18,7 @@ class TransparentViewContribution implements IWorkbenchContribution {
         const viewContainer = viewContainerRegistry.registerViewContainer({
             id: VIEWLET_ID,
             title: 'Transparent View',
-            ctorDescriptor: { ctor: TransparentViewPane, staticArguments: [], supportsDelayedInstantiation: false },
+            ctorDescriptor: { ctor: SeethroughViewPane, staticArguments: [], supportsDelayedInstantiation: false },
             icon: { id: 'codicon-eye' },
             order: 4,
             hideIfEmpty: true
@@ -28,7 +30,7 @@ class TransparentViewContribution implements IWorkbenchContribution {
             id: TRANSPARENT_VIEW_ID,
             name: 'Transparent View',
             containerIcon: { id: 'codicon-eye' },
-            ctorDescriptor: { ctor: TransparentViewPane, staticArguments: [], supportsDelayedInstantiation: false },
+            ctorDescriptor: { ctor: SeethroughViewPane, staticArguments: [], supportsDelayedInstantiation: false },
             canToggleVisibility: true,
             canMoveView: true,
             order: 4
@@ -36,4 +38,4 @@ class TransparentViewContribution implements IWorkbenchContribution {
     }
 }
 
-Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench).registerWorkbenchContribution(TransparentViewContribution, LifecyclePhase.Starting);
+Registry.as<IWorkbenchContributionsRegistry>(WorkbenchExtensions.Workbench).registerWorkbenchContribution(SeethroughViewContribution, LifecyclePhase.Starting);

@@ -186,20 +186,20 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 	private pendingLoadConfig: INativeWindowConfiguration | undefined;
 	private wasLoaded = false;
 
-	private transparentViewDimensions: { x: number; y: number; width: number; height: number } | null = null;
+	private seethroughViewDimensions: { x: number; y: number; width: number; height: number } | null = null;
 
-	private isCursorInTransparentView(): boolean {
-		if (!this.transparentViewDimensions) {
+	private isCursorInSeethroughView(): boolean {
+		if (!this.seethroughViewDimensions) {
 				return false;
 		}
 
 		const cursorPos = screen.getCursorScreenPoint();
 		const windowBounds = this._win.getBounds();
 		const viewBounds = {
-				x: windowBounds.x + this.transparentViewDimensions.x,
-				y: windowBounds.y + this.transparentViewDimensions.y,
-				width: this.transparentViewDimensions.width,
-				height: this.transparentViewDimensions.height
+				x: windowBounds.x + this.seethroughViewDimensions.x,
+				y: windowBounds.y + this.seethroughViewDimensions.y,
+				width: this.seethroughViewDimensions.width,
+				height: this.seethroughViewDimensions.height
 		};
 
 		return (
@@ -212,7 +212,7 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 
 	private startCursorTracking(): void {
 			setInterval(() => {
-					if (this.isCursorInTransparentView()) {
+					if (this.isCursorInSeethroughView()) {
 							this._win.setIgnoreMouseEvents(true, { forward: true });
 					} else {
 							this._win.setIgnoreMouseEvents(false);
@@ -374,8 +374,8 @@ export class CodeWindow extends Disposable implements ICodeWindow {
 
 			this._id = this._win.id;
 
-			validatedIpcMain.on('vscode:transparent-view-dimensions', (_event, dimensions) => {
-				this.transparentViewDimensions = dimensions;
+			validatedIpcMain.on('vscode:seethrough-view-dimensions', (_event, dimensions) => {
+				this.seethroughViewDimensions = dimensions;
 			});
 
 			this.startCursorTracking();

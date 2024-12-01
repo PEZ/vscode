@@ -15,9 +15,9 @@ import { IEditorService } from 'vs/workbench/services/editor/common/editorServic
 import { IContextMenuService } from 'vs/platform/contextview/browser/contextView';
 import { IOpenerService } from 'vs/platform/opener/common/opener';
 
-export let transparentPane: TransparentViewPane;
+export let transparentPane: SeethroughViewPane;
 
-export class TransparentViewPane extends ViewPane {
+export class SeethroughViewPane extends ViewPane {
     constructor(
         options: IViewPaneOptions,
         @IKeybindingService keybindingService: IKeybindingService,
@@ -49,7 +49,7 @@ export class TransparentViewPane extends ViewPane {
 
     override layout(size: number): void {
       super.layout(size);
-      const bodyElement = this.element.querySelector('.transparent-view-pane');
+      const bodyElement = this.element.querySelector('.seethrough-view-pane');
       console.log('BOOM! layout', size, bodyElement);
       if (size > 22) {
         this.sendViewDimensions(bodyElement as HTMLElement);
@@ -66,7 +66,7 @@ export class TransparentViewPane extends ViewPane {
           {
             background-color: #1E1E1E !important;
           }
-          .transparent-view-pane
+          .seethrough-view-pane
           {
             background-color: rgba(0, 0, 0, 0.0) !important;
             border: #1E1E1E solid 1px !important;
@@ -78,7 +78,7 @@ export class TransparentViewPane extends ViewPane {
     override renderBody(container: HTMLElement): void {
       super.renderBody(container);
 
-      container.classList.add('transparent-view-pane');
+      container.classList.add('seethrough-view-pane');
 
       this.sendViewDimensions(container);
       window.addEventListener('resize', () => this.sendViewDimensions(container));
@@ -94,9 +94,9 @@ export class TransparentViewPane extends ViewPane {
             width: rect.width * scale,
             height: rect.height * scale
         };
-        (window as any).electronAPI.sendTransparentViewDimensions(dimensions);
+        (window as any).electronAPI.sendSeethroughViewDimensions(dimensions);
       } else {
-        (window as any).electronAPI.sendTransparentViewDimensions({
+        (window as any).electronAPI.sendSeethroughViewDimensions({
           x: 0,
           y: 0,
           width: 0,
