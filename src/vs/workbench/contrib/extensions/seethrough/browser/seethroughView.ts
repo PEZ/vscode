@@ -55,6 +55,17 @@ export class SeethroughViewPane extends ViewPane {
       }
     }
 
+    protected override layoutBody(height: number, width: number): void {
+      super.layoutBody(height, width);
+      const bodyElement = this.element.querySelector('.seethrough-view-pane');
+      console.log('BOOM! layoutBody', height, width, bodyElement);
+      if (height > 22) {
+        this.sendViewDimensions(bodyElement as HTMLElement);
+      } else {
+        this.sendViewDimensions(null);
+      }
+    }
+
     override renderBody(container: HTMLElement): void {
       super.renderBody(container);
 
