@@ -54,27 +54,29 @@ export class SeethroughViewPane extends ViewPane {
 
     override layout(size: number): void {
       super.layout(size);
-      const bodyElement = this.element.querySelector('.seethrough-view-pane') as HTMLElement;
-      if (bodyElement) {
-        const rect = bodyElement.getBoundingClientRect();
-        console.log('BOOM! layout', size, JSON.stringify(rect));
-        if (size > 22 && rect.height > 2) {
-          this.sendViewDimensions(bodyElement as HTMLElement);
+      setTimeout(() => {
+        const bodyElement = this.element.querySelector('.seethrough-view-pane') as HTMLElement;
+        if (bodyElement) {
+          const rect = bodyElement.getBoundingClientRect();
+          console.log('BOOM! layout', size, JSON.stringify(rect));
+            console.log('BOOM! layoutBody', size, JSON.stringify(rect));
+            this.sendViewDimensions(bodyElement);
+        } else {
+          this.sendViewDimensions(null);
         }
-        if (size < 23) {
-          this.sendViewDimensions(bodyElement as HTMLElement, 0, 0);
-        }
-      }
+      }, 500);
     }
 
     protected override layoutBody(height: number, width: number): void {
       super.layoutBody(height, width);
-      const bodyElement = this.element.querySelector('.seethrough-view-pane') as HTMLElement;
-      if (bodyElement) {
-        const rect = bodyElement.getBoundingClientRect();
-        console.log('BOOM! layoutBody', height, width, JSON.stringify(rect));
-        this.sendViewDimensions(bodyElement, height, width);
-      }
+      setTimeout(() => {
+        const bodyElement = this.element.querySelector('.seethrough-view-pane') as HTMLElement;
+        if (bodyElement) {
+          const rect = bodyElement.getBoundingClientRect();
+          console.log('BOOM! layoutBody', height, width, JSON.stringify(rect));
+          this.sendViewDimensions(bodyElement);
+        }
+      }, 500);
     }
 
     override renderBody(container: HTMLElement): void {
@@ -86,17 +88,15 @@ export class SeethroughViewPane extends ViewPane {
       window.addEventListener('resize', () => this.sendViewDimensions(container));
     }
 
-    private sendViewDimensions(container: HTMLElement, useHeight: number = -1, useWidth: number = -1): void {
-      const rect: Dimensions = container.getBoundingClientRect();
+    private sendViewDimensions(container: HTMLElement | null): void {
+      const rect: Dimensions = container ? container.getBoundingClientRect() : { x: 0, y: 0, width: 0, height: 0 };
       const scale = window.devicePixelRatio / 2.0;
       console.log('BOOM! rect', JSON.stringify(rect));
-      const width = useWidth > -1 ? useWidth : rect.width;
-      const height = useHeight > -1 ? useHeight : rect.height
       const dimensions = {
               x: rect.x * scale + 2,
               y: rect.y * scale + 2,
-              width: width * scale - 4,
-              height: height * scale - 4
+              width: rect.width * scale - 4,
+              height: rect.height * scale - 4
             };
       console.log('BOOM! sending dimensions', JSON.stringify(dimensions));
       (window as any).electronAPI.sendSeethroughViewDimensions(dimensions);
