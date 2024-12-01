@@ -85,7 +85,15 @@ export class SeethroughViewPane extends ViewPane {
       container.classList.add('seethrough-view-pane');
 
       this.sendViewDimensions(container);
-      window.addEventListener('resize', () => this.sendViewDimensions(container));
+      // window.addEventListener('resize', () => this.sendViewDimensions(container));
+      this._register(this.onDidChangeBodyVisibility(visible => {
+        if (!visible) {
+            this.sendViewDimensions(null);
+        } else {
+            this.sendViewDimensions(container);
+        }
+      }
+  ));
     }
 
     private sendViewDimensions(container: HTMLElement | null): void {
