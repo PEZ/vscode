@@ -61,6 +61,9 @@ export class SeethroughViewPane extends ViewPane {
         if (size > 22 && rect.height > 2) {
           this.sendViewDimensions(bodyElement as HTMLElement);
         }
+        if (size < 23) {
+          this.sendViewDimensions(bodyElement as HTMLElement, 0, 0);
+        }
       }
     }
 
@@ -83,15 +86,17 @@ export class SeethroughViewPane extends ViewPane {
       window.addEventListener('resize', () => this.sendViewDimensions(container));
     }
 
-    private sendViewDimensions(container: HTMLElement, height?: number, width?: number): void {
+    private sendViewDimensions(container: HTMLElement, useHeight: number = -1, useWidth: number = -1): void {
       const rect: Dimensions = container.getBoundingClientRect();
       const scale = window.devicePixelRatio / 2.0;
       console.log('BOOM! rect', JSON.stringify(rect));
+      const width = useWidth > -1 ? useWidth : rect.width;
+      const height = useHeight > -1 ? useHeight : rect.height
       const dimensions = {
               x: rect.x * scale + 2,
               y: rect.y * scale + 2,
-              width: (width || rect.width) * scale - 4,
-              height: (height || rect.height) * scale - 4
+              width: width * scale - 4,
+              height: height * scale - 4
             };
       console.log('BOOM! sending dimensions', JSON.stringify(dimensions));
       (window as any).electronAPI.sendSeethroughViewDimensions(dimensions);
