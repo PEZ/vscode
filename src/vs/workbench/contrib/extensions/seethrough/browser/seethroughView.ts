@@ -15,8 +15,6 @@ import { IEditorService } from 'vs/workbench/services/editor/common/editorServic
 import { IContextMenuService } from 'vs/platform/contextview/browser/contextView';
 import { IOpenerService } from 'vs/platform/opener/common/opener';
 
-export let transparentPane: SeethroughViewPane;
-
 export class SeethroughViewPane extends ViewPane {
     constructor(
         options: IViewPaneOptions,
@@ -44,7 +42,6 @@ export class SeethroughViewPane extends ViewPane {
                 themeService,
                 telemetryService,
             );
-						transparentPane = this;
     }
 
     override layout(size: number): void {

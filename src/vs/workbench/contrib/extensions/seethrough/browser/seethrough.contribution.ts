@@ -13,7 +13,6 @@ export const TRANSPARENT_VIEW_ID = 'workbench.view.seethroughView';
 class SeethroughViewContribution implements IWorkbenchContribution {
     constructor() {
         console.log('BOOM! Registering Transparent View');
-        // Register Transparent View
         const viewContainerRegistry = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry);
         const viewContainer = viewContainerRegistry.registerViewContainer({
             id: VIEWLET_ID,
@@ -24,7 +23,6 @@ class SeethroughViewContribution implements IWorkbenchContribution {
             hideIfEmpty: true
         }, ViewContainerLocation.Panel);
 
-        // Register Transparent View Descriptor
         const viewsRegistry = Registry.as<IViewsRegistry>(ViewContainerExtensions.ViewsRegistry);
         viewsRegistry.registerViews([{
             id: TRANSPARENT_VIEW_ID,
