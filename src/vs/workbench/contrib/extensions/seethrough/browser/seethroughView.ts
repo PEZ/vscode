@@ -15,6 +15,14 @@ import { IEditorService } from 'vs/workbench/services/editor/common/editorServic
 import { IContextMenuService } from 'vs/platform/contextview/browser/contextView';
 import { IOpenerService } from 'vs/platform/opener/common/opener';
 
+
+type Dimensions = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+};
+
 export class SeethroughViewPane extends ViewPane {
     constructor(
         options: IViewPaneOptions,
@@ -46,23 +54,23 @@ export class SeethroughViewPane extends ViewPane {
 
     override layout(size: number): void {
       super.layout(size);
-      const bodyElement = this.element.querySelector('.seethrough-view-pane');
-      console.log('BOOM! layout', size, bodyElement);
-      if (size > 22) {
-        this.sendViewDimensions(bodyElement as HTMLElement);
-      } else {
-        this.sendViewDimensions(null);
+      const bodyElement = this.element.querySelector('.seethrough-view-pane') as HTMLElement;
+      if (bodyElement) {
+        const rect = bodyElement.getBoundingClientRect();
+        console.log('BOOM! layout', size, JSON.stringify(rect));
+        if (size > 22 && rect.height > 2) {
+          this.sendViewDimensions(bodyElement as HTMLElement);
+        }
       }
     }
 
     protected override layoutBody(height: number, width: number): void {
       super.layoutBody(height, width);
-      const bodyElement = this.element.querySelector('.seethrough-view-pane');
-      console.log('BOOM! layoutBody', height, width, bodyElement);
-      if (height > 22) {
-        this.sendViewDimensions(bodyElement as HTMLElement);
-      } else {
-        this.sendViewDimensions(null);
+      const bodyElement = this.element.querySelector('.seethrough-view-pane') as HTMLElement;
+      if (bodyElement) {
+        const rect = bodyElement.getBoundingClientRect();
+        console.log('BOOM! layoutBody', height, width, JSON.stringify(rect));
+        this.sendViewDimensions(bodyElement, height, width);
       }
     }
 
@@ -73,25 +81,19 @@ export class SeethroughViewPane extends ViewPane {
 
       this.sendViewDimensions(container);
       window.addEventListener('resize', () => this.sendViewDimensions(container));
-   }
+    }
 
-   private sendViewDimensions(container: HTMLElement | null): void {
-    const dimensions = (container !== null) ? (() => {
-        const rect = container.getBoundingClientRect();
-        const scale = window.devicePixelRatio / 2.0;
-        return {
-            x: rect.x * scale + 2,
-            y: rect.y * scale + 2,
-            width: rect.width  * scale - 4,
-            height: rect.height * scale - 4
-        };
-    })() : {
-        x: 0,
-        y: 0,
-        width: 0,
-        height: 0
-    };
-    console.log('BOOM! sending dimensions', JSON.stringify(dimensions));
-    (window as any).electronAPI.sendSeethroughViewDimensions(dimensions);
-  }
+    private sendViewDimensions(container: HTMLElement, height?: number, width?: number): void {
+      const rect: Dimensions = container.getBoundingClientRect();
+      const scale = window.devicePixelRatio / 2.0;
+      console.log('BOOM! rect', JSON.stringify(rect));
+      const dimensions = {
+              x: rect.x * scale + 2,
+              y: rect.y * scale + 2,
+              width: (width || rect.width) * scale - 4,
+              height: (height || rect.height) * scale - 4
+            };
+      console.log('BOOM! sending dimensions', JSON.stringify(dimensions));
+      (window as any).electronAPI.sendSeethroughViewDimensions(dimensions);
+    }
 }
