@@ -55,23 +55,6 @@ export class SeethroughViewPane extends ViewPane {
       }
     }
 
-    override render(): void {
-      super.render();
-      const style = document.createElement('style');
-      style.textContent = `
-          .pane-body, .composite.title, .pane-header, .terminal-split-pane
-          {
-            background-color: #1E1E1E !important;
-          }
-          .seethrough-view-pane
-          {
-            background-color: rgba(0, 0, 0, 0.0) !important;
-            border: #1E1E1E solid 1px !important;
-          }
-      `;
-      document.head.appendChild(style);
-    }
-
     override renderBody(container: HTMLElement): void {
       super.renderBody(container);
 
@@ -86,10 +69,10 @@ export class SeethroughViewPane extends ViewPane {
         const rect = container.getBoundingClientRect();
         const scale = window.devicePixelRatio / 2.0;
         const dimensions = {
-            x: rect.x * scale,
-            y: rect.y * scale,
-            width: rect.width * scale,
-            height: rect.height * scale
+            x: (rect.x + 2) * scale,
+            y: (rect.y + 2) * scale,
+            width: (rect.width - 4) * scale,
+            height: (rect.height - 4) * scale
         };
         (window as any).electronAPI.sendSeethroughViewDimensions(dimensions);
       } else {

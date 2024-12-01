@@ -283,3 +283,13 @@ body.web {
 	outline: 1px dashed var(--vscode-toolbar-hoverOutline);
 	outline-offset: -1px;
 }
+
+.pane-body, .composite.title, .pane-header, .terminal-split-pane
+{
+	background-color: #252526 !important;
+}
+.seethrough-view-pane
+{
+	background-color: rgba(0, 0, 0, 0.0) !important;
+	border: #1E1E1E solid 1px !important;
+}
