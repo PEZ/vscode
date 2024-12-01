@@ -284,11 +284,30 @@ body.web {
 	outline-offset: -1px;
 }
 
-.pane-body, .composite.title, .pane-header, .terminal-split-pane
+.sidebar .pane-body
+{
+	background-color: #252526;
+}
+
+.pane-header
 {
 	background-color: #252526 !important;
 }
-.seethrough-view-pane
+
+.composite.title
+{
+	background-color: #1E1E1E !important;
+}
+
+.composite.panel .pane-body {
+	background-color: #1E1E1E;
+}
+
+.monaco-workbench .pane-body.integrated-terminal {
+	background-color: #1E1E1E !important;
+}
+
+.composite.panel .seethrough-view-pane, .sidebar .seethrough-view-pane
 {
 	background-color: rgba(0, 0, 0, 0.0) !important;
 	border: #1E1E1E solid 1px !important;

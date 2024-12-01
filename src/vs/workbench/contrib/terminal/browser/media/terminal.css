@@ -8,7 +8,7 @@
 	align-items: baseline;
 	display: flex;
 	flex-direction: column;
-	background-color: transparent !important;
+	/* background-color: transparent !important; */
 	user-select: initial;
 	-webkit-user-select: initial;
 	position: relative;
