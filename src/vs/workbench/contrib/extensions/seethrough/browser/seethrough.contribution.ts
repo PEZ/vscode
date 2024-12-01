@@ -6,9 +6,13 @@ import { Extensions as ViewContainerExtensions, IViewContainersRegistry, ViewCon
 import { IWorkbenchContributionsRegistry, Extensions as WorkbenchExtensions, IWorkbenchContribution } from 'vs/workbench/common/contributions';
 import { LifecyclePhase } from 'vs/workbench/services/lifecycle/common/lifecycle';
 import { SeethroughViewPane } from './seethroughView';
+import { Codicon } from 'vs/base/common/codicons';
+import { registerIcon } from 'vs/platform/theme/common/iconRegistry';
+import * as nls from 'vs/nls';
 
 export const VIEWLET_ID = 'workbench.view.transparent';
 export const TRANSPARENT_VIEW_ID = 'workbench.view.seethroughView';
+const seethroughViewIcon = registerIcon('seethrough-view-icon', Codicon.eyeWatch, nls.localize('seethroughViewIcon', 'View icon of the seethrough view.'));
 
 class SeethroughViewContribution implements IWorkbenchContribution {
     constructor() {
@@ -18,7 +22,7 @@ class SeethroughViewContribution implements IWorkbenchContribution {
             id: VIEWLET_ID,
             title: 'Transparent View',
             ctorDescriptor: { ctor: SeethroughViewPane, staticArguments: [], supportsDelayedInstantiation: false },
-            icon: { id: 'codicon-eye' },
+            icon: seethroughViewIcon,
             order: 4,
             hideIfEmpty: true
         }, ViewContainerLocation.Panel);
@@ -27,7 +31,7 @@ class SeethroughViewContribution implements IWorkbenchContribution {
         viewsRegistry.registerViews([{
             id: TRANSPARENT_VIEW_ID,
             name: 'Transparent View',
-            containerIcon: { id: 'codicon-eye' },
+            containerIcon: seethroughViewIcon,
             ctorDescriptor: { ctor: SeethroughViewPane, staticArguments: [], supportsDelayedInstantiation: false },
             canToggleVisibility: true,
             canMoveView: true,
