@@ -47,14 +47,22 @@ export class TransparentViewPane extends ViewPane {
 						transparentPane = this;
     }
 
-    override renderBody(container: HTMLElement): void {
-      super.renderBody(container);
+    override layout(size: number): void {
+      super.layout(size);
+      const bodyElement = this.element.querySelector('.transparent-view-pane');
+      console.log('BOOM! layout', size, bodyElement);
+      if (size > 22) {
+        this.sendViewDimensions(bodyElement as HTMLElement);
+      } else {
+        this.sendViewDimensions(null);
+      }
+    }
 
-      container.classList.add('transparent-view-pane');
-
+    override render(): void {
+      super.render();
       const style = document.createElement('style');
       style.textContent = `
-          .pane-body, .composite.title, .pane-header
+          .pane-body, .composite.title, .pane-header, .terminal-split-pane
           {
             background-color: #1E1E1E !important;
           }
@@ -65,22 +73,35 @@ export class TransparentViewPane extends ViewPane {
           }
       `;
       document.head.appendChild(style);
+    }
+
+    override renderBody(container: HTMLElement): void {
+      super.renderBody(container);
+
+      container.classList.add('transparent-view-pane');
 
       this.sendViewDimensions(container);
       window.addEventListener('resize', () => this.sendViewDimensions(container));
    }
 
-
-
-    private sendViewDimensions(container: HTMLElement): void {
-      const rect = container.getBoundingClientRect();
-      const scale = window.devicePixelRatio / 2.0;
-      const dimensions = {
-          x: rect.x * scale,
-          y: rect.y * scale,
-          width: rect.width * scale,
-          height: rect.height * scale
-      };
-      (window as any).electronAPI.sendTransparentViewDimensions(dimensions);
+    private sendViewDimensions(container: HTMLElement | null): void {
+      if (container !== null) {
+        const rect = container.getBoundingClientRect();
+        const scale = window.devicePixelRatio / 2.0;
+        const dimensions = {
+            x: rect.x * scale,
+            y: rect.y * scale,
+            width: rect.width * scale,
+            height: rect.height * scale
+        };
+        (window as any).electronAPI.sendTransparentViewDimensions(dimensions);
+      } else {
+        (window as any).electronAPI.sendTransparentViewDimensions({
+          x: 0,
+          y: 0,
+          width: 0,
+          height: 0
+        });
+      }
     }
 }
