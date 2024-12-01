@@ -16,7 +16,6 @@ const seethroughViewIcon = registerIcon('seethrough-view-icon', Codicon.eyeWatch
 
 class SeethroughViewContribution implements IWorkbenchContribution {
     constructor() {
-        console.log('BOOM! Registering Transparent View');
         const viewContainerRegistry = Registry.as<IViewContainersRegistry>(ViewContainerExtensions.ViewContainersRegistry);
         const viewContainer = viewContainerRegistry.registerViewContainer({
             id: VIEWLET_ID,
