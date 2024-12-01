@@ -112,20 +112,20 @@ export class ThemeMainService extends Disposable implements IThemeMainService {
 		]);
 
 		// Update in opened windows
-		// if (typeof windowId === 'number') {
-		// 	this.updateBackgroundColor(windowId, splash);
-		// }
+		if (typeof windowId === 'number') {
+			this.updateBackgroundColor(windowId, splash);
+		}
 	}
 
-	// private updateBackgroundColor(windowId: number, splash: IPartsSplash): void {
-	// 	for (const window of BrowserWindow.getAllWindows()) {
-	// 		if (window.id === windowId) {
-	// 			// window.setBackgroundColor(splash.colorInfo.background);
-	// 			console.debug(`[ThemeMainService]: Set background color for window ${windowId} to ${splash.colorInfo.background}`);
-	// 			break;
-	// 		}
-	// 	}
-	// }
+	private updateBackgroundColor(windowId: number, splash: IPartsSplash): void {
+		for (const window of BrowserWindow.getAllWindows()) {
+			if (window.id === windowId) {
+				// window.setBackgroundColor(splash.colorInfo.background);
+				// console.debug(`[ThemeMainService]: Set background color for window ${windowId} to ${splash.colorInfo.background}`);
+				break;
+			}
+		}
+	}
 
 	getWindowSplash(): IPartsSplash | undefined {
 		return this.stateService.getItem<IPartsSplash>(THEME_WINDOW_SPLASH);
